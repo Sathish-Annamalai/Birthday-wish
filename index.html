@@ -27,10 +27,9 @@
             justify-content: center;
             align-items: center;
             z-index: 10;
-            padding-bottom: 120px; /* Space for buttons */
+            padding-bottom: 120px; 
         }
 
-        /* 3D Spinning Cake */
         .three-d-image {
             width: 120px;
             display: none; 
@@ -38,7 +37,6 @@
             filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));
         }
 
-        /* Person's Photo Styling */
         #person-photo {
             width: 180px;
             height: 180px;
@@ -108,7 +106,6 @@
             transform: translateY(-3px);
         }
 
-        /* Animations */
         .balloon {
             position: absolute;
             bottom: -100px;
@@ -137,7 +134,7 @@
 <body>
 
     <audio id="bday-audio" loop>
-        <source src="music.mp3" type="audio/mpeg">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-17.mp3" type="audio/mpeg">
     </audio>
 
     <div id="display-area">
@@ -162,39 +159,31 @@
         let partyStarted = false;
 
         function wish(name) {
-            // Play Audio
             const audio = document.getElementById('bday-audio');
             audio.play().catch(e => console.log("Audio waiting for interaction"));
 
-            // Toggle Visuals
             document.getElementById('cake-img').style.display = 'block';
             const photo = document.getElementById('person-photo');
             photo.style.display = 'block';
 
             let msg = "";
-            let file = "";
+            // Updated to your specific filename
+            let file = "Nish.jpeg"; 
 
-            // Custom Logic
             if (name === 'Akhil' || name === 'Tejas') {
                 msg = "Happy birthday Chittappa!";
-                file = name.toLowerCase() + ".jpg";
             } else if (name === 'Sathish' || name === 'Sivakami') {
                 msg = "Happy birthday Nishanth!";
-                file = name.toLowerCase() + ".jpg";
             } else if (name === 'Vihan') {
                 msg = "Happy Birthday Daddy!";
-                file = "vihan.jpg";
             } else if (name === 'Sanjay') {
                 msg = "Happy Birthday Nishanth Mama!";
-                file = "sanjay.jpg";
             }
 
-            // Update UI
             document.getElementById('main-wish').innerText = "🎉 " + msg;
             document.getElementById('sub-text').innerText = "A special wish for " + name + "!";
             photo.src = file;
 
-            // Start Animations
             if (!partyStarted) {
                 setInterval(createBalloon, 500);
                 setInterval(createFloatie, 2000);
