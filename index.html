@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Celebration</title>
+    <style>
+        body {
+            /* Birthday Backdrop with slight texture */
+            background: radial-gradient(circle, #ffdee9 0%, #b5fffc 100%), 
+                        url('https://www.transparenttextures.com/patterns/confetti.png');
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            perspective: 1000px;
+            flex-direction: column;
+        }
+
+        /* Container for the 3D Image and Message */
+        #display-area {
+            text-align: center;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .three-d-image {
+            width: 180px;
+            margin-bottom: 20px;
+            /* Initially hidden until first click */
+            display: none; 
+            animation: spin3D 5s infinite linear;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));
+        }
+
+        @keyframes spin3D {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(360deg); }
+        }
+
+        h1 { 
+            color: #d81b60; 
+            font-size: 2.5rem; 
+            margin: 10px 0;
+            text-shadow: 2px 2px 5px rgba(255,255,255,0.7);
+        }
+
+        p#sub-text { color: #880e4f; font-size: 1.1rem; }
+
+        /* Fixed Button Panel at the bottom */
+        #selection-panel {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 15px 20px 25px 20px; /* Extra bottom padding for mobile safari */
+            border-radius: 20px 20px 0 0;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .btn-group {
+            display: grid;
+            /* Creates 3 columns for 6 buttons */
+            grid-template-columns: 1fr 1fr 1fr; 
+            gap: 10px;
+            max-width: 500px;
+            width: 95%;
+        }
+
+        button {
+            padding: 12px 5px;
+            font-size: 0.9rem;
+            border: 2px solid #d81b60;
+            border-radius: 12px;
+            cursor: pointer;
+            background-color: white;
+            color: #d81b60;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-transform: capitalize;
+        }
+
+        button:hover {
+            background-color: #d81b60;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* Floaties Animation Elements */
+        .floatie {
+            position: absolute;
+            width: 30px;
+            height: auto;
+            opacity: 0.5;
+            z-index: 1; /* Behind main message */
+            animation: floatBackground 15s linear infinite;
+        }
+
+        @keyframes floatBackground {
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.5; }
+            90% { opacity: 0.5; }
+            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* The Balloons from bottom */
+        .balloon {
+            position: absolute;
+            bottom: -100px;
+            width: 40px;
+            height: 60px;
+            border-radius: 50%;
+            opacity: 0.7;
+            animation: floatUp 6s linear infinite;
+            z-index: 2;
+        }
+
+        @keyframes floatUp {
+            to { transform: translateY(-110vh); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="display-area">
+        <img id="cake-img" src="https://img.icons8.com/plasticine/400/birthday-cake.png" class="three-d-image">
+        <h1 id="main-wish">Click a name to start the party!</h1>
+        <p id="sub-text">🎈🎈🎈</p>
+    </div>
+
+    <div id="selection-panel">
+        <p style="margin: 0 0 10px 0; color: #ad1457; font-weight: bold; font-size: 0.9rem;">Select a person:</p>
+        <div class="btn-group">
+            <button onclick="wish('Akhil')">Akhil</button>
+            <button onclick="wish('Tejas')">Tejas</button>
+            <button onclick="wish('Sathish')">Sathish</button>
+            <button onclick="wish('Sivakami')">Sivakami</button>
+            <button onclick="wish('Vihan')">Vihan</button>
+            <button onclick="wish('Sanjay')">Sanjay</button>
+        </div>
+    </div>
+
+    <script>
+        let partyStarted = false;
+
+        function wish(name) {
+            // 1. Show the 3D image if it's the first click
+            document.getElementById('cake-img').style.display = 'block';
+
+            // 2. Determine the message based on the logic provided
+            let message = "";
+            let personalize = "";
+
+            if (name === 'Akhil' || name === 'Tejas') {
+                message = "Happy birthday Chittappa!";
+            } else if (name === 'Sathish' || name === 'Sivakami') {
+                message = "Happy birthday Nishanth!";
+            } else if (name === 'Vihan') {
+                message = "Happy Birthday Daddy!";
+            } else if (name === 'Sanjay') {
+                message = "Happy Birthday Nishanth Mama!";
+            }
+
+            // 3. Update the text
+            document.getElementById('main-wish').innerText = "🎉 " + message + " 🎂";
+            document.getElementById('sub-text').innerText = "Wishing you a great year ahead, " + name + "!";
+
+            // 4. Start the continuous background animations only once
+            if (!partyStarted) {
+                // Main balloons
+                setInterval(createBalloon, 400);
+                // Background floaties (cakes/gifts)
+                setInterval(createBackgroundFloatie, 1500);
+                partyStarted = true;
+            }
+            
+            // 5. Create a burst for every click
+            for(let i=0; i<8; i++) {
+                setTimeout(createBalloon, i * 80);
+            }
+        }
+
+        // --- Animation Functions ---
+
+        // Function 1: Continuous Floating Balloons (From bottom)
+        function createBalloon() {
+            const balloon = document.createElement('div');
+            balloon.className = 'balloon';
+            const colors = ['#ff4081', '#7c4dff', '#00bcd4', '#ffeb3b', '#ff5722', '#4caf50'];
+            balloon.style.left = Math.random() * 95 + 'vw';
+            balloon.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            balloon.style.animationDuration = (Math.random() * 2 + 4) + 's';
+            document.body.appendChild(balloon);
+            setTimeout(() => { balloon.remove(); }, 7000);
+        }
+
+        // Function 2: Background Floating Elements (Cakes, Gifts, Poppers)
+        const floatieIcons = [
+            'https://img.icons8.com/plasticine/100/birthday-cake.png',
+            'https://img.icons8.com/plasticine/100/gift.png',
+            'https://img.icons8.com/plasticine/100/party-popper.png',
+            'https://img.icons8.com/plasticine/100/confetti.png'
+        ];
+
+        function createBackgroundFloatie() {
+            const floatie = document.createElement('img');
+            floatie.className = 'floatie';
+            floatie.src = floatieIcons[Math.floor(Math.random() * floatieIcons.length)];
+            floatie.style.left = Math.random() * 95 + 'vw';
+            floatie.style.animationDuration = (Math.random() * 5 + 10) + 's'; // Slower float
+            floatie.style.width = (Math.random() * 20 + 20) + 'px'; // Varied sizes
+            
+            document.body.appendChild(floatie);
+            setTimeout(() => { floatie.remove(); }, 16000);
+        }
+    </script>
+</body>
+</html>
