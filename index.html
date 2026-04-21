@@ -2,50 +2,53 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Birthday Surprise!</title>
     <style>
         body {
             background: radial-gradient(circle, #ffdee9 0%, #b5fffc 100%), 
                         url('https://www.transparenttextures.com/patterns/confetti.png');
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             height: 100vh;
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
             perspective: 1000px;
-            flex-direction: column;
         }
 
         #display-area {
             text-align: center;
-            min-height: 450px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            padding-top: 20px;
             z-index: 10;
-            padding-bottom: 120px; 
+            width: 100%;
         }
 
         .three-d-image {
-            width: 120px;
+            width: 100px;
             display: none; 
+            margin: 0 auto;
             animation: spin3D 5s infinite linear;
             filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));
         }
 
-        #person-photo {
-            width: 180px;
-            height: 180px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 8px solid white;
+        /* The 3-Photo Gallery Container */
+        #photo-gallery {
             display: none;
             margin: 15px 0;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .gallery-img {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid white;
+            margin: 5px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
             animation: zoomIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
@@ -61,14 +64,14 @@
 
         h1 { 
             color: #d81b60; 
-            font-size: 2rem; 
-            margin: 10px 0;
+            font-size: 1.8rem; 
+            margin: 10px 5px;
             text-shadow: 2px 2px 5px rgba(255,255,255,0.8);
         }
 
         #selection-panel {
-            background: rgba(255, 255, 255, 0.85);
-            padding: 15px 10px 25px 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px 0;
             border-radius: 25px 25px 0 0;
             backdrop-filter: blur(10px);
             width: 100%;
@@ -78,19 +81,29 @@
             flex-direction: column;
             align-items: center;
             z-index: 100;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
         }
 
+        /* GRID FIX: 3 columns for desktop, 2 for mobile */
         .btn-group {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            max-width: 450px;
+            gap: 12px;
+            max-width: 400px;
             width: 90%;
         }
 
+        @media (max-width: 450px) {
+            .btn-group {
+                grid-template-columns: repeat(2, 1fr); /* Shows 2 buttons per row on mobile */
+            }
+            .gallery-img { width: 85px; height: 85px; }
+            h1 { font-size: 1.4rem; }
+        }
+
         button {
-            padding: 10px 5px;
-            font-size: 0.85rem;
+            padding: 12px 5px;
+            font-size: 0.9rem;
             border: 2px solid #d81b60;
             border-radius: 15px;
             cursor: pointer;
@@ -100,10 +113,10 @@
             transition: 0.3s;
         }
 
-        button:hover {
+        button:active, button:hover {
             background: #d81b60;
             color: white;
-            transform: translateY(-3px);
+            transform: scale(0.95);
         }
 
         .balloon {
@@ -137,10 +150,15 @@
         <source src="Bsong.mp3" type="audio/mpeg">
     </audio>
 
-
     <div id="display-area">
         <img id="cake-img" src="https://img.icons8.com/plasticine/400/birthday-cake.png" class="three-d-image">
-        <img id="person-photo" src="Nish3.jpeg" class="gallery-img">
+        
+        <div id="photo-gallery">
+            <img src="Nish3.jpeg" class="gallery-img">
+            <img src="Nish1.jpeg" class="gallery-img">
+            <img src="Nish2.jpeg" class="gallery-img">
+        </div>
+
         <h1 id="main-wish">Who is the Birthday Star?</h1>
         <p id="sub-text" style="color:#880e4f">Click a name below! 🎁</p>
     </div>
@@ -161,36 +179,33 @@
 
         function wish(name) {
             const audio = document.getElementById('bday-audio');
-            audio.play().catch(e => console.log("Audio waiting for interaction"));
+            audio.play().catch(e => console.log("Waiting for interaction"));
 
             document.getElementById('cake-img').style.display = 'block';
-            const photo = document.getElementById('person-photo');
-            photo.style.display = 'block';
+            document.getElementById('photo-gallery').style.display = 'flex';
 
             let msg = "";
-            // Updated to your specific filename
-             let file = "Nish3.jpeg"; 
 
+            // Logic for Names (Updated to "Nish")
             if (name === 'Akhil' || name === 'Tejas') {
                 msg = "Happy birthday Chittappa!";
             } else if (name === 'Sathish' || name === 'Sivakami') {
-                msg = "Happy birthday Nishanth!";
+                msg = "Happy birthday Nish!";
             } else if (name === 'Vihan') {
                 msg = "Happy Birthday Daddy!";
             } else if (name === 'Sanjay') {
-                msg = "Happy Birthday Nishanth Mama!";
+                msg = "Happy Birthday Nish Mama!";
             }
 
             document.getElementById('main-wish').innerText = "🎉 " + msg;
             document.getElementById('sub-text').innerText = "A special wish from " + name + "!";
-            photo.src = file;
 
             if (!partyStarted) {
                 setInterval(createBalloon, 500);
                 setInterval(createFloatie, 2000);
                 partyStarted = true;
             }
-            for(let i=0; i<5; i++) setTimeout(createBalloon, i*100);
+            for(let i=0; i<8; i++) setTimeout(createBalloon, i*100);
         }
 
         function createBalloon() {
